@@ -1,3 +1,8 @@
 #!/bin/bash
 
 echo "It works!"
+#for loop to count to 10
+for i in range {1..10}
+do
+echo $i
+done
