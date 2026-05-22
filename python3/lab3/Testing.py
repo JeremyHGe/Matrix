@@ -1,28 +1,21 @@
 #!/usr/bin/python3
 import os
 
+import subprocess
 
-ls_return = os.system('ls')
-print('The contents of ls_return:',ls_return)
-whoami_return = os.system('whoami')
-print('The contents of whoami_return:',whoami_return)
-ifconfig_return = os.system('ifconfig')
-print('The contents of ifconfig_return:',ifconfig_return)
+p = subprocess.Popen(
+    ["df -h | grep '/$' | awk '{print $4}'"],
+    stdout=subprocess.PIPE,
+    stdin=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    shell=True
+)
 
+output= p.communicate()  # unpack the tuple
 
-'''
-ls_return = os.popen('ls')
-print('The contents of ls_return:',ls_return)
-whoami_return = os.popen('whoami')
-print('The contents of whoami_return:',whoami_return)
-ifconfig_return = os.popen('ifconfig')
-print('The contents of ifconfig_return:',ifconfig_return)
+def free_space():
+    space = output[0].decode('utf-8').strip()
+    return space
 
-whoami_return=os.popen('whoami')
-whoami_contents = whoami_return.read()
-print('whoami_contents:',whoami_contents)
-
-ipconfig_return = os.popen('ipconfig')
-ipconfig_contents = ipconfig_return.read()
-print('The contents of ipconfig_return:',ipconfig_contents)
-'''
+available_space = free_space()
+print(available_space)
