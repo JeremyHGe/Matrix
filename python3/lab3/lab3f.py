@@ -6,7 +6,7 @@ def add_item_to_list(ordered_list):
 def remove_items_from_list(ordered_list, items_to_remove):
     for items in items_to_remove:
         ordered_list.remove(items)
-
+# Main code
 if __name__ == '__main__':
     print(my_list)
     add_item_to_list(my_list)
