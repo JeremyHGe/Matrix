@@ -69,9 +69,27 @@ def after(date: str) -> str:
     return next_date # Returns the next following date according to the date given
 
 
-def usage():
+def usage(date):
     "Print a usage message to the user"
+    if len(sys.argv) != 3:
+        return "Please enter only 2 dates"
+    if len(date) != 10:
+        return "Please enter 10 characters for your date"
+    if date[4] != '-' or date[7] != '-':
+        return "Please separate your date using -"
+    for c in date:
+        if c not in ('1','2','3','4','5','6','7','8','9','0','-'):
+            return "Please use numbers and - for formatting your date"
     
+    str_year, str_month, str_day = date.split('-') # Splits the string according to -
+    year = int(str_year)   # Converts to integer the str_year and saves as year
+    month = int(str_month) # Converts to integer the str_month and saves as month
+    day = int(str_day)     # Converts to integer the str_day and saves as day
+    if month > 12 or month == 0:
+        return "Please enter a valid month"
+    if day > mon_max(month, year) or day == 0:
+        return "Please enter a valid day"
+    return True
 
 
 def leap_year(year: int) -> bool:
@@ -96,7 +114,10 @@ def leap_year(year: int) -> bool:
     return False       # Hence leap year is false
 def valid_date(date: str) -> bool:
     "check validity of date and return True if valid"
-    
+    if len(sys.argv) != 3:
+        return "Please enter only 2 dates"
+
+
     if len(date) != 10:
         return False
     if date[4] != '-' or date[7] != '-':
@@ -116,6 +137,13 @@ def valid_date(date: str) -> bool:
     return True
 def day_count(start_date: str, stop_date: str) -> int:
     "Loops through range of dates, and returns number of weekend days"
+    usage(start_date)
+    usage(stop_date)
+    if not valid_date(start_date):
+        return usage(start_date)
+    elif not valid_date(stop_date):
+        return usage(stop_date)
+    start_date, stop_date = earlier_date(start_date,stop_date)
     next_date = start_date # Placeholder for next_date
     weekends_total = 0     # Placeholder for total weekends
     while next_date != after(stop_date): # Runs until the stop date, but we check one day ahead to take into consideration the final day
@@ -128,6 +156,51 @@ def day_count(start_date: str, stop_date: str) -> int:
             weekends_total += 1
         next_date = after(next_date)
     return weekends_total
+
+def earlier_date(start_date: str,stop_date: str):
+    while True:
+        """
+        if not valid_date(start_date):
+            print(usage(start_date))
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            stop_date = input("Enter end date (YYYY-MM-DD): ")
+            continue
+
+        if not valid_date(stop_date):
+            print(usage(stop_date))
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            stop_date = input("Enter end date (YYYY-MM-DD): ")
+            continue
+"""
+        str_start_year, str_start_month, str_start_day = start_date.split('-')
+        start_year = int(str_start_year)
+        start_month = int(str_start_month)
+        start_day = int(str_start_day)
+
+        str_stop_year, str_stop_month, str_stop_day = stop_date.split('-')
+        stop_year = int(str_stop_year)
+        stop_month = int(str_stop_month)
+        stop_day = int(str_stop_day)
+
+        if start_year > stop_year:
+            print("Start date must be before end date.")
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            stop_date = input("Enter end date (YYYY-MM-DD): ")
+            continue
+        elif start_year == stop_year and start_month > stop_month:
+            print("Start date must be before end date.")
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            stop_date = input("Enter end date (YYYY-MM-DD): ")
+            continue
+        elif start_year == stop_year and start_month == stop_month and start_day > stop_day:
+            print("Start date must be before end date.")
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            stop_date = input("Enter end date (YYYY-MM-DD): ")
+            continue
+        return start_date, stop_date
+
+        
+
 if __name__ == "__main__":
-    print(day_count('2026-06-12','2026-06-14'))
-    print(day_count('2022-03-16','2022-11-20')) # year, month, day
+    print(usage(sys.argv[1],sys.argv[2]))
+    day_count(sys.argv[1],sys.argv[2])
