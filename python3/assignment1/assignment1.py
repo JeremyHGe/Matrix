@@ -202,5 +202,4 @@ def earlier_date(start_date: str,stop_date: str):
         
 
 if __name__ == "__main__":
-    print(usage(sys.argv[1],sys.argv[2]))
-    day_count(sys.argv[1],sys.argv[2])
+    print(day_count(sys.argv[1],sys.argv[2]))
