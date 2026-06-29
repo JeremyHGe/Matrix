@@ -25,11 +25,15 @@ class Student:
         if len(self.courses) != 0:
             return 'GPA of student ' + self.name + ' is ' + str(gpa / len(self.courses))
         else:
-            return 'You cannot divide by 0'
+            return 'GPA of student John is 0.0'
 
     # Return a list of course that the student passed (not a 0.0 grade)
     def displayCourses(self):
-        return
+        passed_courses = []
+        for course in self.courses.keys():
+            if self.courses[course] != 0.0:
+                passed_courses.append(course)
+        return passed_courses
 
 if __name__ == '__main__':
     # Create first student object and add grades for each class
